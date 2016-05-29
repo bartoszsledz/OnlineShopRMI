@@ -18,6 +18,23 @@ public class LoginInfo implements Serializable {
 		return "LoginInfo [id=" + id + ", pass=" + pass + "]";
 	}
 
+	public String getId() {
+		return id;
+	}
+
+	public String getPass() {
+		return pass;
+	}
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((id == null) ? 0 : id.hashCode());
+		result = prime * result + ((pass == null) ? 0 : pass.hashCode());
+		return result;
+	}
+
 	@Override
 	public boolean equals(Object obj) {
 		if (this == obj)
@@ -39,4 +56,6 @@ public class LoginInfo implements Serializable {
 			return false;
 		return true;
 	}
+	
+	
 }

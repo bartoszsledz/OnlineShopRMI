@@ -42,7 +42,7 @@ public class AdminFrame implements Serializable {
 	}
 
 	private void createAllComponents() {
-		frame = new JFrame("Online Shop");
+		frame = new JFrame("Online Shop Admin Console");
 		panel = new JPanel();
 		model = new DefaultTableModel();
 		model2 = new DefaultTableModel();
@@ -188,7 +188,7 @@ public class AdminFrame implements Serializable {
 		showProductsBtn.addActionListener(actionListener);
 	}
 
-	public void addLoginBtnActionListener(ActionListener actionListener) {
+	public void loginBtnActionListener(ActionListener actionListener) {
 		loginBtn.addActionListener(actionListener);
 	}
 
@@ -204,8 +204,12 @@ public class AdminFrame implements Serializable {
 		refreshBtn.addActionListener(actionListener);
 	}
 
-	public void showClientFrame() {
+	public void showAdminFrame() {
 		frame.setVisible(true);
+	}
+	
+	public void setOffLoginBtn(){
+		loginBtn.setEnabled(false);
 	}
 
 	public JTable getTable() {

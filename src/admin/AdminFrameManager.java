@@ -14,7 +14,7 @@ import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 
 import interfacermi.Configuration;
-import interfacermi.RemoteInterface;
+import interfacermi.RMIInterface;
 import server.Customer;
 import server.LoginInfo;
 import server.Product;
@@ -24,11 +24,11 @@ public class AdminFrameManager implements Serializable {
 
 	private boolean isAdmin = false;
 	private DefaultTableModel model, model2;
-	private AdminFrame clientFrame;
-	RemoteInterface server;
+	private AdminFrame adminFrame;
+	RMIInterface server;
 
 	public AdminFrameManager(AdminFrame clientFrame) {
-		this.clientFrame = clientFrame;
+		this.adminFrame = clientFrame;
 		addButtonsListeners();
 	}
 
@@ -40,10 +40,10 @@ public class AdminFrameManager implements Serializable {
 		refreshBtnListner();
 	}
 
-	private void connecttoServer() {
+	private void connectToServer() {
 		try {
 			Registry registry = LocateRegistry.getRegistry(Configuration.REMOTE_HOST, Configuration.REMOTE_PORT);
-			server = (RemoteInterface) (registry.lookup(Configuration.REMOTE_ID));
+			server = (RMIInterface) (registry.lookup(Configuration.REMOTE_ID));
 		} catch (AccessException e) {
 			e.printStackTrace();
 		} catch (RemoteException e) {
@@ -54,11 +54,12 @@ public class AdminFrameManager implements Serializable {
 		}
 	}
 
-	private void checkUser() {
+	private void checkAdmin() {
 		try {
-			isAdmin = server.checkUser(new LoginInfo(clientFrame.getTxtUsername(), clientFrame.getPwdPassword()));
+			isAdmin = server.checkAdmin(new LoginInfo(adminFrame.getTxtUsername(), adminFrame.getPwdPassword()));
 			if (isAdmin) {
 				JOptionPane.showMessageDialog(null, "Zosta³eœ po³¹czony z serverem jako Admin!");
+				adminFrame.setOffLoginBtn();
 			} else {
 				JOptionPane.showMessageDialog(null, "Z³e dane logowania.");
 			}
@@ -68,15 +69,17 @@ public class AdminFrameManager implements Serializable {
 	}
 
 	private void addUserBtnListner() {
-		clientFrame.addUserBtnActionListener(new ActionListener() {
+		adminFrame.addUserBtnActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				try {
 					Customer c = server
-							.addCustomer(new Customer(clientFrame.getNewLogin(), clientFrame.getNewPassword()));
+							.addCustomer(new Customer(adminFrame.getNewLogin(), adminFrame.getNewPassword()));
 					JOptionPane.showMessageDialog(null, "Prawid³owo dodano u¿ytkownika: " + c.getId());
 				} catch (RemoteException e1) {
 					e1.printStackTrace();
+				} catch (Exception e1) {
+					JOptionPane.showMessageDialog(null, "Zaloguj siê!");
 				}
 			}
 		});
@@ -84,19 +87,23 @@ public class AdminFrameManager implements Serializable {
 	}
 
 	private void refreshBtnListner() {
-		clientFrame.refreshBtnActionListener(new ActionListener() {
+		adminFrame.refreshBtnActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				createCustomersTableModel();
-				refreshSelectedTable(model2);
-				showCustomersInTable();
+				if (isAdmin) {
+					createCustomersTableModel();
+					refreshSelectedTable(model2);
+					showCustomersInTable();
+				} else {
+					JOptionPane.showMessageDialog(null, "Zaloguj siê!");
+				}
 			}
 		});
 
 	}
 
 	private void przegladajBtnListener() {
-		clientFrame.addShowProductsBtnActionListener(new ActionListener() {
+		adminFrame.addShowProductsBtnActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				if (isAdmin) {
@@ -111,22 +118,22 @@ public class AdminFrameManager implements Serializable {
 	}
 
 	private void loginBtnListener() {
-		clientFrame.addLoginBtnActionListener(new ActionListener() {
+		adminFrame.loginBtnActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				connecttoServer();
-				checkUser();
+				connectToServer();
+				checkAdmin();
 			}
 		});
 	}
 
 	private void addProductBtnListener() {
-		clientFrame.addDodajProduktBtnActionListener(new ActionListener() {
+		adminFrame.addDodajProduktBtnActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				try {
-					Product p = server.addProduct(new Product(clientFrame.getTxtId(), clientFrame.getTxtNazwa(),
-							clientFrame.getTxtProducent(), clientFrame.getTxtCena(), clientFrame.getTxtIlosc()));
+					Product p = server.addProduct(new Product(adminFrame.getTxtId(), adminFrame.getTxtNazwa(),
+							adminFrame.getTxtProducent(), adminFrame.getTxtCena(), adminFrame.getTxtIlosc()));
 					JOptionPane.showMessageDialog(null, "Dodano produkt: " + p.getNazwa());
 				} catch (RemoteException e1) {
 					e1.printStackTrace();
@@ -138,11 +145,11 @@ public class AdminFrameManager implements Serializable {
 	}
 
 	private void createProductsTableModel() {
-		model = (DefaultTableModel) clientFrame.getTable().getModel();
+		model = (DefaultTableModel) adminFrame.getTable().getModel();
 	}
 
 	private void createCustomersTableModel() {
-		model2 = (DefaultTableModel) clientFrame.getTable2().getModel();
+		model2 = (DefaultTableModel) adminFrame.getTable2().getModel();
 	}
 
 	private void showProductsInTable() {
