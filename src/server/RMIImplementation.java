@@ -26,9 +26,49 @@ public class RMIImplementation extends UnicastRemoteObject implements RMIInterfa
 	}
 
 	@Override
-	public void viewProduct(Product produkt) throws RemoteException {
-		// DODAC
-
+	public ArrayList<Product> searchProduct(String searchTerm, int valueOfSlider) throws RemoteException {
+		ArrayList<Product> lista = new ArrayList<>();
+		switch (valueOfSlider) {
+		case 0:
+			for (Product product : products) {
+				if (String.valueOf(product.getId()) != null && product.getId() == Integer.parseInt(searchTerm)) {
+					lista.add(product);
+				}
+			}
+			break;
+		case 1:
+			for (Product product : products) {
+				if (product.getNazwa() != null && product.getNazwa().contains(searchTerm)) {
+					lista.add(product);
+				}
+			}
+			break;
+		case 2:
+			for (Product product : products) {
+				if (String.valueOf(product.getCena()) != null && product.getCena() == Double.parseDouble(searchTerm)) {
+					lista.add(product);
+				}
+			}
+			break;
+		case 3:
+			for (Product product : products) {
+				if (product.getProducent() != null && product.getProducent().contains(searchTerm)) {
+					lista.add(product);
+				}
+			}
+			break;
+		case 4:
+			for (Product product : products) {
+				if (String.valueOf(product.getIloscWMagazynie()) != null
+						&& product.getIloscWMagazynie() == Integer.parseInt(searchTerm)) {
+					lista.add(product);
+				}
+			}
+			break;
+		default:
+			break;
+		}
+		return lista;
 	}
 
 	@Override

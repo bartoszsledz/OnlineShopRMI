@@ -2,6 +2,7 @@ package client;
 
 import java.awt.event.ActionListener;
 import java.io.Serializable;
+import java.util.Hashtable;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -13,8 +14,10 @@ import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.JSeparator;
+import javax.swing.JSlider;
 
-public class ClientFrame implements Serializable{
+public class ClientFrame implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	private JFrame frame;
@@ -22,11 +25,12 @@ public class ClientFrame implements Serializable{
 	private JScrollPane scrollPane, scrollPane2;
 	private JTable table, table2;
 	private DefaultTableModel model, model2;
-	private JButton searchBtn, loginBtn, refreshBtn, showAllProducts;
+	private JButton searchBtn, loginBtn, refreshBtn, showAllProducts, buyBtn;
 	private JTextField txtSearch, txtUsername;
 	private JPasswordField txtPassword;
 	private JLabel shopLabel, loginLabel, passwordLabel, cartLabel;
-	private JButton buyBtn;
+	private JSeparator separator;
+	private JSlider slider;
 
 	public ClientFrame() {
 		initialize();
@@ -37,8 +41,10 @@ public class ClientFrame implements Serializable{
 		frameSettings();
 		labelSettings();
 		buttonsSettings();
+		radioButtonsSettings();
 		txtSettings();
 		tableSettings();
+		sliderSettings();
 	}
 
 	private void createAllComponents() {
@@ -67,7 +73,7 @@ public class ClientFrame implements Serializable{
 		panel.add(shopLabel);
 
 		cartLabel = new JLabel("Koszyk");
-		cartLabel.setBounds(10, 309, 76, 15);
+		cartLabel.setBounds(10, 326, 76, 15);
 		panel.add(cartLabel);
 
 		loginLabel = new JLabel("Login: ");
@@ -97,13 +103,13 @@ public class ClientFrame implements Serializable{
 		model2.addColumn("Producent");
 		model2.addColumn("Ilosc");
 		table2.setEnabled(false);
-		scrollPane2.setBounds(10, 335, 615, 182);
+		scrollPane2.setBounds(10, 352, 615, 165);
 		scrollPane2.setViewportView(table2);
 	}
 
 	private void buttonsSettings() {
 		searchBtn = new JButton("Szukaj");
-		searchBtn.setBounds(232, 211, 110, 25);
+		searchBtn.setBounds(365, 211, 110, 25);
 		panel.add(searchBtn);
 
 		loginBtn = new JButton("Zaloguj");
@@ -113,20 +119,23 @@ public class ClientFrame implements Serializable{
 		refreshBtn = new JButton("Od\u015Bwie\u017C");
 		refreshBtn.setBounds(10, 527, 120, 23);
 		panel.add(refreshBtn);
-		
+
 		showAllProducts = new JButton("Poka\u017C wszystkie");
 		showAllProducts.setBounds(485, 211, 140, 25);
 		panel.add(showAllProducts);
-		
+
 		buyBtn = new JButton("Kup");
-		buyBtn.setBounds(352, 211, 89, 25);
+		buyBtn.setBounds(536, 279, 89, 25);
 		panel.add(buyBtn);
+	}
+
+	private void radioButtonsSettings() {
 	}
 
 	private void txtSettings() {
 		txtSearch = new JTextField();
 		txtSearch.setText("Szukany produkt");
-		txtSearch.setBounds(10, 211, 206, 25);
+		txtSearch.setBounds(245, 211, 110, 25);
 		panel.add(txtSearch);
 		txtSearch.setColumns(10);
 
@@ -140,12 +149,39 @@ public class ClientFrame implements Serializable{
 		txtPassword.setText("user123");
 		txtPassword.setBounds(440, 6, 86, 25);
 		panel.add(txtPassword);
+
+		separator = new JSeparator();
+		separator.setBounds(10, 315, 615, 15);
+		panel.add(separator);
+	}
+
+	private void sliderSettings() {
+		slider = new JSlider();
+		slider.setValue(1);
+		slider.setBounds(10, 209, 225, 53);
+		slider.setMaximum(4);
+		slider.setMinimum(0);
+		slider.setMinorTickSpacing(1);
+		slider.setPaintTicks(true);
+		slider.setPaintLabels(true);
+		slider.setSnapToTicks(true); // dopasowuje do najblizszego pktu
+		panel.add(slider);
+
+		Hashtable<Object, Object> labelTable = new Hashtable<>();
+		labelTable.put(0, new JLabel("Id"));
+		labelTable.put(1, new JLabel("Nazwa"));
+		labelTable.put(2, new JLabel("Cena"));
+		labelTable.put(3, new JLabel("Prod."));
+		labelTable.put(4, new JLabel("Ilosc"));
+
+		slider.setLabelTable(labelTable);
+		slider.setPaintLabels(true);
 	}
 
 	public void searchBtnActionListener(ActionListener actionListener) {
 		searchBtn.addActionListener(actionListener);
 	}
-	
+
 	public void showAllProductsBtnActionListener(ActionListener actionListener) {
 		showAllProducts.addActionListener(actionListener);
 	}
@@ -161,7 +197,7 @@ public class ClientFrame implements Serializable{
 	public void showClientFrame() {
 		frame.setVisible(true);
 	}
-	
+
 	public void setOffLoginBtn() {
 		loginBtn.setEnabled(false);
 	}
@@ -174,7 +210,7 @@ public class ClientFrame implements Serializable{
 		return table2;
 	}
 
-	public String getTxtProducent() {
+	public String getTxtSearch() {
 		return txtSearch.getText();
 	}
 
@@ -184,5 +220,9 @@ public class ClientFrame implements Serializable{
 
 	public String getPwdPassword() {
 		return String.valueOf(txtPassword.getPassword());
+	}
+
+	public int getSliderValue() {
+		return slider.getValue();
 	}
 }

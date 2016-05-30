@@ -28,11 +28,13 @@ public class ClientFrameManager implements Serializable {
 	public ClientFrameManager(ClientFrame clientFrame) {
 		this.clientFrame = clientFrame;
 		addButtonsListeners();
+		createProductsTableModel();
 	}
 
 	private void addButtonsListeners() {
 		loginBtnListener();
 		showAllPRoductsListener();
+		searchBtnListener();
 	}
 
 	private void connectToServer() {
@@ -45,6 +47,20 @@ public class ClientFrameManager implements Serializable {
 			e.printStackTrace();
 		} catch (NotBoundException e) {
 			JOptionPane.showMessageDialog(null, "Z³e dane!");
+			e.printStackTrace();
+		}
+	}
+
+	private void checkUser() {
+		try {
+			isUser = server.checkUser(new LoginInfo(clientFrame.getTxtUsername(), clientFrame.getPwdPassword()));
+			if (isUser) {
+				JOptionPane.showMessageDialog(null, "Zosta³eœ po³¹czony z serverem jako U¿ytkownik!");
+				clientFrame.setOffLoginBtn();
+			} else {
+				JOptionPane.showMessageDialog(null, "Brak takiego u¿ytkownika!");
+			}
+		} catch (RemoteException e) {
 			e.printStackTrace();
 		}
 	}
@@ -64,9 +80,12 @@ public class ClientFrameManager implements Serializable {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				if (isUser) {
-					createProductsTableModel();
 					refreshSelectedTable(model);
-					showProductsInTable();
+					try {
+						showProductsInTable(server.getProducts());
+					} catch (RemoteException e1) {
+						e1.printStackTrace();
+					}
 				} else {
 					JOptionPane.showMessageDialog(null, "Zaloguj siê!");
 				}
@@ -74,38 +93,38 @@ public class ClientFrameManager implements Serializable {
 		});
 	}
 
-	private void checkUser() {
-		try {
-			isUser = server.checkUser(new LoginInfo(clientFrame.getTxtUsername(), clientFrame.getPwdPassword()));
-			if (isUser) {
-				JOptionPane.showMessageDialog(null, "Zosta³eœ po³¹czony z serverem jako U¿ytkownik!");
-				clientFrame.setOffLoginBtn();
-			} else {
-				JOptionPane.showMessageDialog(null, "Brak takiego u¿ytkownika!");
+	private void searchBtnListener() {
+		clientFrame.searchBtnActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				refreshSelectedTable(model);
+				try {
+					showProductsInTable(server.searchProduct(clientFrame.getTxtSearch(), clientFrame.getSliderValue()));
+				} catch (RemoteException e1) {
+					e1.printStackTrace();
+				} catch (NumberFormatException e1) {
+					JOptionPane.showMessageDialog(null, "Z³y format!");
+				} catch (Exception e1) {
+					JOptionPane.showMessageDialog(null, "Zaloguj siê!");
+				}
 			}
-		} catch (RemoteException e) {
-			e.printStackTrace();
-		}
+		});
 	}
 
 	private void createProductsTableModel() {
 		model = (DefaultTableModel) clientFrame.getTable().getModel();
 	}
 
-	private void showProductsInTable() {
-		try {
-			ArrayList<Product> list = server.getProducts();
-			Object[] row = new Object[5];
-			for (int i = 0; i < list.size(); i++) {
-				row[0] = list.get(i).getId();
-				row[1] = list.get(i).getNazwa();
-				row[2] = list.get(i).getCena();
-				row[3] = list.get(i).getProducent();
-				row[4] = list.get(i).getIloscWMagazynie();
-				model.addRow(row);
-			}
-		} catch (RemoteException e) {
-			e.printStackTrace();
+	private void showProductsInTable(ArrayList<Product> list) {
+		ArrayList<Product> listOfProducts = list;
+		Object[] row = new Object[5];
+		for (int i = 0; i < list.size(); i++) {
+			row[0] = listOfProducts.get(i).getId();
+			row[1] = listOfProducts.get(i).getNazwa();
+			row[2] = listOfProducts.get(i).getCena();
+			row[3] = listOfProducts.get(i).getProducent();
+			row[4] = listOfProducts.get(i).getIloscWMagazynie();
+			model.addRow(row);
 		}
 	}
 

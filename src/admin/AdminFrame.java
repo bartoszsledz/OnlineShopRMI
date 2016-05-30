@@ -23,7 +23,7 @@ public class AdminFrame implements Serializable {
 	private JScrollPane scrollPane, scrollPane2;
 	private JTable table, table2;
 	private DefaultTableModel model, model2;
-	private JButton showProductsBtn, addProductBtn, loginBtn, addUserBtn, refreshBtn;
+	private JButton showProductsBtn, addProductBtn, loginBtn, addUserBtn, showUsersBtn;
 	private JTextField txtId, txtName, txtManufacturer, txtPrice, txtQuantity, txtUsername, txtNewUsername;
 	private JPasswordField txtPassword, txtNewPassword;
 	private JLabel shopLabel, loginLabel, passwordLabel, newLoginLabel, newPasswordLabel;
@@ -124,9 +124,9 @@ public class AdminFrame implements Serializable {
 		addUserBtn.setBounds(505, 460, 120, 23);
 		panel.add(addUserBtn);
 		
-		refreshBtn = new JButton("Od\u015Bwie\u017C");
-		refreshBtn.setBounds(505, 494, 120, 23);
-		panel.add(refreshBtn);
+		showUsersBtn = new JButton("Przegl¹daj");
+		showUsersBtn.setBounds(505, 494, 120, 23);
+		panel.add(showUsersBtn);
 	}
 
 	private void txtSettings() {
@@ -201,7 +201,7 @@ public class AdminFrame implements Serializable {
 	}
 	
 	public void refreshBtnActionListener(ActionListener actionListener) {
-		refreshBtn.addActionListener(actionListener);
+		showUsersBtn.addActionListener(actionListener);
 	}
 
 	public void showAdminFrame() {

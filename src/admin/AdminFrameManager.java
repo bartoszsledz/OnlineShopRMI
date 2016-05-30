@@ -30,6 +30,8 @@ public class AdminFrameManager implements Serializable {
 	public AdminFrameManager(AdminFrame clientFrame) {
 		this.adminFrame = clientFrame;
 		addButtonsListeners();
+		createProductsTableModel();
+		createCustomersTableModel();
 	}
 
 	public void addButtonsListeners() {
@@ -75,6 +77,8 @@ public class AdminFrameManager implements Serializable {
 				try {
 					Customer c = server
 							.addCustomer(new Customer(adminFrame.getNewLogin(), adminFrame.getNewPassword()));
+					refreshSelectedTable(model2);
+					showCustomersInTable(server.getCustomers());
 					JOptionPane.showMessageDialog(null, "Prawid³owo dodano u¿ytkownika: " + c.getId());
 				} catch (RemoteException e1) {
 					e1.printStackTrace();
@@ -91,9 +95,12 @@ public class AdminFrameManager implements Serializable {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				if (isAdmin) {
-					createCustomersTableModel();
 					refreshSelectedTable(model2);
-					showCustomersInTable();
+					try {
+						showCustomersInTable(server.getCustomers());
+					} catch (RemoteException e1) {
+						e1.printStackTrace();
+					}
 				} else {
 					JOptionPane.showMessageDialog(null, "Zaloguj siê!");
 				}
@@ -107,9 +114,12 @@ public class AdminFrameManager implements Serializable {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				if (isAdmin) {
-					createProductsTableModel();
 					refreshSelectedTable(model);
-					showProductsInTable();
+					try {
+						showProductsInTable(server.getProducts());
+					} catch (RemoteException e1) {
+						e1.printStackTrace();
+					}
 				} else {
 					JOptionPane.showMessageDialog(null, "Zaloguj siê!");
 				}
@@ -134,11 +144,15 @@ public class AdminFrameManager implements Serializable {
 				try {
 					Product p = server.addProduct(new Product(adminFrame.getTxtId(), adminFrame.getTxtNazwa(),
 							adminFrame.getTxtProducent(), adminFrame.getTxtCena(), adminFrame.getTxtIlosc()));
+					refreshSelectedTable(model);
+					showProductsInTable(server.getProducts());
 					JOptionPane.showMessageDialog(null, "Dodano produkt: " + p.getNazwa());
 				} catch (RemoteException e1) {
 					e1.printStackTrace();
+				} catch (NumberFormatException e1) {
+					JOptionPane.showMessageDialog(null, "Z³y format!");
 				} catch (Exception e1) {
-					JOptionPane.showMessageDialog(null, "Poda³eœ b³êdne dane albo nie jesteœ zalogowany.");
+					JOptionPane.showMessageDialog(null, "Nie jesteœ zalogowany.");
 				}
 			}
 		});
@@ -152,35 +166,27 @@ public class AdminFrameManager implements Serializable {
 		model2 = (DefaultTableModel) adminFrame.getTable2().getModel();
 	}
 
-	private void showProductsInTable() {
-		try {
-			ArrayList<Product> list = server.getProducts();
-			Object[] row = new Object[5];
-			for (int i = 0; i < list.size(); i++) {
-				row[0] = list.get(i).getId();
-				row[1] = list.get(i).getNazwa();
-				row[2] = list.get(i).getCena();
-				row[3] = list.get(i).getProducent();
-				row[4] = list.get(i).getIloscWMagazynie();
-				model.addRow(row);
-			}
-		} catch (RemoteException e) {
-			e.printStackTrace();
+	private void showProductsInTable(ArrayList<Product> list) {
+		ArrayList<Product> listOfProducts = list;
+		Object[] row = new Object[5];
+		for (int i = 0; i < list.size(); i++) {
+			row[0] = listOfProducts.get(i).getId();
+			row[1] = listOfProducts.get(i).getNazwa();
+			row[2] = listOfProducts.get(i).getCena();
+			row[3] = listOfProducts.get(i).getProducent();
+			row[4] = listOfProducts.get(i).getIloscWMagazynie();
+			model.addRow(row);
 		}
 	}
 
-	private void showCustomersInTable() {
-		try {
-			ArrayList<Customer> list = server.getCustomers();
-			Object[] row = new Object[3];
-			for (int i = 0; i < list.size(); i++) {
-				row[0] = list.get(i).getId();
-				row[1] = list.get(i).getPassword();
-				row[2] = list.get(i).getOrders();
-				model2.addRow(row);
-			}
-		} catch (RemoteException e) {
-			e.printStackTrace();
+	private void showCustomersInTable(ArrayList<Customer> list) {
+		ArrayList<Customer> listOfCustomers = list;
+		Object[] row = new Object[3];
+		for (int i = 0; i < list.size(); i++) {
+			row[0] = listOfCustomers.get(i).getId();
+			row[1] = listOfCustomers.get(i).getPassword();
+			row[2] = listOfCustomers.get(i).getOrders();
+			model2.addRow(row);
 		}
 	}
 

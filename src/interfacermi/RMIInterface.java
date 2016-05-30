@@ -14,8 +14,6 @@ public interface RMIInterface extends Remote {
 
 	public Product buyProduct() throws RemoteException;
 
-	public void viewProduct(Product produkt) throws RemoteException;
-
 	public void viewProducts() throws RemoteException;
 	
 	public boolean checkAdmin(LoginInfo loginInfo) throws RemoteException;
@@ -31,4 +29,6 @@ public interface RMIInterface extends Remote {
 	public ArrayList<Order> getOrders() throws RemoteException;
 	
 	public Customer getCustomer(String id) throws RemoteException;
+
+	public ArrayList<Product> searchProduct(String searchTerm, int valueOfSlider) throws RemoteException;
 }
