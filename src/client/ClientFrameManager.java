@@ -83,7 +83,7 @@ public class ClientFrameManager implements Serializable {
 				} catch (RemoteException e1) {
 					e1.printStackTrace();
 				} catch (Exception e1) {
-					JOptionPane.showMessageDialog(null, "Brak takiego produktu albo nie jestœ zalogowany!");
+					JOptionPane.showMessageDialog(null, "Wybierz prokukt klikaj¹c na jego numer ID.");
 				}
 			}
 		});
