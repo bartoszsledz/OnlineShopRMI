@@ -10,25 +10,27 @@ import server.Order;
 import server.Product;
 
 public interface RMIInterface extends Remote {
-	public ArrayList<Product> getProducts() throws RemoteException;
+	ArrayList<Product> getProducts() throws RemoteException;
 
-	public Product buyProduct() throws RemoteException;
+	void addProductsOnStart() throws RemoteException;
 
-	public void viewProducts() throws RemoteException;
-	
-	public boolean checkAdmin(LoginInfo loginInfo) throws RemoteException;
-	
-	public boolean checkUser(LoginInfo loginInfo) throws RemoteException;
+	boolean checkAdmin(LoginInfo loginInfo) throws RemoteException;
 
-	public Product addProduct(Product product) throws RemoteException;
-	
-	public Customer addCustomer(Customer customer) throws RemoteException;
+	boolean checkUser(LoginInfo loginInfo) throws RemoteException;
 
-	public ArrayList<Customer> getCustomers() throws RemoteException;
+	Product addProduct(Product product) throws RemoteException, Exception;
 
-	public ArrayList<Order> getOrders() throws RemoteException;
-	
-	public Customer getCustomer(String id) throws RemoteException;
+	Customer addCustomer(Customer customer) throws RemoteException, Exception;
 
-	public ArrayList<Product> searchProduct(String searchTerm, int valueOfSlider) throws RemoteException;
+	ArrayList<Customer> getCustomers() throws RemoteException;
+
+	ArrayList<Order> getOrders() throws RemoteException;
+
+	Customer getCustomer(String id) throws RemoteException;
+
+	ArrayList<Product> searchProduct(String searchTerm, int valueOfSlider) throws RemoteException;
+
+	Order addToCartProduct(Object object, String customerId) throws RemoteException, Exception;
+
+	ArrayList<Order> deleteFromCart() throws RemoteException;
 }

@@ -49,10 +49,9 @@ public class AdminFrameManager implements Serializable {
 		} catch (AccessException e) {
 			e.printStackTrace();
 		} catch (RemoteException e) {
-			e.printStackTrace();
+			JOptionPane.showMessageDialog(null, "Brak po³¹czenia z serverem.!");
 		} catch (NotBoundException e) {
 			JOptionPane.showMessageDialog(null, "Z³e dane!");
-			e.printStackTrace();
 		}
 	}
 
@@ -62,11 +61,12 @@ public class AdminFrameManager implements Serializable {
 			if (isAdmin) {
 				JOptionPane.showMessageDialog(null, "Zosta³eœ po³¹czony z serverem jako Admin!");
 				adminFrame.setOffLoginBtn();
+				adminFrame.setLoginTxtOff();
 			} else {
 				JOptionPane.showMessageDialog(null, "Z³e dane logowania.");
 			}
 		} catch (RemoteException e) {
-			e.printStackTrace();
+			JOptionPane.showMessageDialog(null, "Brak po³¹czenia z serverem.!");
 		}
 	}
 
@@ -82,12 +82,13 @@ public class AdminFrameManager implements Serializable {
 					JOptionPane.showMessageDialog(null, "Prawid³owo dodano u¿ytkownika: " + c.getId());
 				} catch (RemoteException e1) {
 					e1.printStackTrace();
+				} catch (IllegalArgumentException e1) {
+					JOptionPane.showMessageDialog(null, "Taki u¿ytkownik ju¿ istnieje!");
 				} catch (Exception e1) {
 					JOptionPane.showMessageDialog(null, "Zaloguj siê!");
 				}
 			}
 		});
-
 	}
 
 	private void refreshBtnListner() {
@@ -100,6 +101,8 @@ public class AdminFrameManager implements Serializable {
 						showCustomersInTable(server.getCustomers());
 					} catch (RemoteException e1) {
 						e1.printStackTrace();
+					} catch (Exception e1) {
+						JOptionPane.showMessageDialog(null, "Brak zamówieñ!");
 					}
 				} else {
 					JOptionPane.showMessageDialog(null, "Zaloguj siê!");
@@ -146,13 +149,14 @@ public class AdminFrameManager implements Serializable {
 							adminFrame.getTxtProducent(), adminFrame.getTxtCena(), adminFrame.getTxtIlosc()));
 					refreshSelectedTable(model);
 					showProductsInTable(server.getProducts());
+					adminFrame.setEmptyFields();
 					JOptionPane.showMessageDialog(null, "Dodano produkt: " + p.getNazwa());
 				} catch (RemoteException e1) {
 					e1.printStackTrace();
 				} catch (NumberFormatException e1) {
 					JOptionPane.showMessageDialog(null, "Z³y format!");
 				} catch (Exception e1) {
-					JOptionPane.showMessageDialog(null, "Nie jesteœ zalogowany.");
+					JOptionPane.showMessageDialog(null, "Taki produkt ju¿ istnieje w sklepie albo nie jesteœ zalogowany.");
 				}
 			}
 		});
@@ -179,14 +183,15 @@ public class AdminFrameManager implements Serializable {
 		}
 	}
 
-	private void showCustomersInTable(ArrayList<Customer> list) {
+	private void showCustomersInTable(ArrayList<Customer> list) throws Exception {
 		ArrayList<Customer> listOfCustomers = list;
 		Object[] row = new Object[3];
 		for (int i = 0; i < list.size(); i++) {
 			row[0] = listOfCustomers.get(i).getId();
 			row[1] = listOfCustomers.get(i).getPassword();
-			row[2] = listOfCustomers.get(i).getOrders();
+			row[2] = listOfCustomers.get(i).getUserOrders();
 			model2.addRow(row);
+			System.out.println("Zamówienia u¿ytkownika: " +listOfCustomers.get(i).getId() +" to: " + listOfCustomers.get(i).getUserOrders());
 		}
 	}
 

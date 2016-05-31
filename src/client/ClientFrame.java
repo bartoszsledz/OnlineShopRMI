@@ -25,7 +25,7 @@ public class ClientFrame implements Serializable {
 	private JScrollPane scrollPane, scrollPane2;
 	private JTable table, table2;
 	private DefaultTableModel model, model2;
-	private JButton searchBtn, loginBtn, refreshBtn, showAllProducts, buyBtn;
+	private JButton searchBtn, loginBtn, deleteFromCartBtn, showAllProducts, addToCartBtn, buyBtn;
 	private JTextField txtSearch, txtUsername;
 	private JPasswordField txtPassword;
 	private JLabel shopLabel, loginLabel, passwordLabel, cartLabel;
@@ -93,7 +93,8 @@ public class ClientFrame implements Serializable {
 		model.addColumn("Cena");
 		model.addColumn("Producent");
 		model.addColumn("Ilosc");
-		table.setEnabled(false);
+		table.setRowSelectionAllowed(true);
+		// table.setEnabled(false);
 		scrollPane.setBounds(10, 35, 615, 165);
 		scrollPane.setViewportView(table);
 
@@ -102,7 +103,7 @@ public class ClientFrame implements Serializable {
 		model2.addColumn("Cena");
 		model2.addColumn("Producent");
 		model2.addColumn("Ilosc");
-		table2.setEnabled(false);
+		table.setRowSelectionAllowed(true);
 		scrollPane2.setBounds(10, 352, 615, 165);
 		scrollPane2.setViewportView(table2);
 	}
@@ -116,16 +117,20 @@ public class ClientFrame implements Serializable {
 		loginBtn.setBounds(536, 6, 89, 25);
 		panel.add(loginBtn);
 
-		refreshBtn = new JButton("Od\u015Bwie\u017C");
-		refreshBtn.setBounds(10, 527, 120, 23);
-		panel.add(refreshBtn);
+		deleteFromCartBtn = new JButton("Wyczyœæ koszyk");
+		deleteFromCartBtn.setBounds(10, 527, 134, 23);
+		panel.add(deleteFromCartBtn);
 
-		showAllProducts = new JButton("Poka\u017C wszystkie");
+		showAllProducts = new JButton("Poka¿ wszystkie");
 		showAllProducts.setBounds(485, 211, 140, 25);
 		panel.add(showAllProducts);
 
+		addToCartBtn = new JButton("Dodaj do koszyka");
+		addToCartBtn.setBounds(485, 279, 140, 25);
+		panel.add(addToCartBtn);
+
 		buyBtn = new JButton("Kup");
-		buyBtn.setBounds(536, 279, 89, 25);
+		buyBtn.setBounds(536, 527, 89, 23);
 		panel.add(buyBtn);
 	}
 
@@ -191,7 +196,15 @@ public class ClientFrame implements Serializable {
 	}
 
 	public void refreshBtnActionListener(ActionListener actionListener) {
-		refreshBtn.addActionListener(actionListener);
+		deleteFromCartBtn.addActionListener(actionListener);
+	}
+
+	public void addToCartBtnActionListener(ActionListener actionListener) {
+		addToCartBtn.addActionListener(actionListener);
+	}
+
+	public void deleteFromCartBtnActionListener(ActionListener actionListener) {
+		deleteFromCartBtn.addActionListener(actionListener);
 	}
 
 	public void showClientFrame() {
@@ -224,5 +237,14 @@ public class ClientFrame implements Serializable {
 
 	public int getSliderValue() {
 		return slider.getValue();
+	}
+
+	public void setLoginTxtOff() {
+		txtUsername.setEditable(false);
+		txtPassword.setEditable(false);
+	}
+
+	public void setEmptySearchField() {
+		txtSearch.setText("");
 	}
 }
