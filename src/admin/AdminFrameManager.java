@@ -154,7 +154,7 @@ public class AdminFrameManager implements Serializable {
 				} catch (RemoteException e1) {
 					e1.printStackTrace();
 				} catch (NumberFormatException e1) {
-					JOptionPane.showMessageDialog(null, "Z³y format!");
+					JOptionPane.showMessageDialog(null, "Zaloguj siê!");
 				} catch (Exception e1) {
 					JOptionPane.showMessageDialog(null, "Taki produkt ju¿ istnieje w sklepie albo nie jesteœ zalogowany.");
 				}

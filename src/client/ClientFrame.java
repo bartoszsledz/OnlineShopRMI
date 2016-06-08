@@ -65,6 +65,7 @@ public class ClientFrame implements Serializable {
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setBounds(100, 100, 650, 600);
 		frame.getContentPane().setLayout(null);
+		frame.setResizable(false);
 	}
 
 	private void labelSettings() {
@@ -94,7 +95,6 @@ public class ClientFrame implements Serializable {
 		model.addColumn("Producent");
 		model.addColumn("Ilosc");
 		table.setRowSelectionAllowed(true);
-		// table.setEnabled(false);
 		scrollPane.setBounds(10, 35, 615, 165);
 		scrollPane.setViewportView(table);
 
@@ -117,21 +117,21 @@ public class ClientFrame implements Serializable {
 		loginBtn.setBounds(536, 6, 89, 25);
 		panel.add(loginBtn);
 
-		deleteFromCartBtn = new JButton("Wyczyœæ koszyk");
+		/*deleteFromCartBtn = new JButton("Wyczyœæ koszyk");
 		deleteFromCartBtn.setBounds(10, 527, 134, 23);
-		panel.add(deleteFromCartBtn);
+		panel.add(deleteFromCartBtn);*/
 
 		showAllProducts = new JButton("Poka¿ wszystkie");
 		showAllProducts.setBounds(485, 211, 140, 25);
 		panel.add(showAllProducts);
 
-		addToCartBtn = new JButton("Dodaj do koszyka");
+		addToCartBtn = new JButton("Kup");
 		addToCartBtn.setBounds(485, 279, 140, 25);
 		panel.add(addToCartBtn);
 
-		buyBtn = new JButton("Kup");
+		/*buyBtn = new JButton("Kup");
 		buyBtn.setBounds(536, 527, 89, 23);
-		panel.add(buyBtn);
+		panel.add(buyBtn);*/
 	}
 
 	private void radioButtonsSettings() {
@@ -204,7 +204,7 @@ public class ClientFrame implements Serializable {
 	}
 
 	public void deleteFromCartBtnActionListener(ActionListener actionListener) {
-		deleteFromCartBtn.addActionListener(actionListener);
+		//deleteFromCartBtn.addActionListener(actionListener);
 	}
 
 	public void showClientFrame() {

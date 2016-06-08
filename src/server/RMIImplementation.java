@@ -27,7 +27,7 @@ public class RMIImplementation extends UnicastRemoteObject implements RMIInterfa
 			if (p.getId() == productId) {
 				for (Customer c : customers) {
 					if (c.getId().equals(customerId)) {
-						if (p.getIloscWMagazynie() > 0) {
+						if (p.getIloscWMagazynie() > 1) {
 							int i = p.getIloscWMagazynie();
 							i--;
 							p.setIloscWMagazynie(i);

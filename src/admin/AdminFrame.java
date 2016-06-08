@@ -64,6 +64,7 @@ public class AdminFrame implements Serializable {
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setBounds(100, 100, 650, 600);
 		frame.getContentPane().setLayout(null);
+		frame.setResizable(false);
 	}
 
 	private void labelSettings() {
